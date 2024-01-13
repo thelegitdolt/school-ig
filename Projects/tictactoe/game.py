@@ -1,12 +1,28 @@
 from Projects.tictactoe.board import Board, Square
-from Projects.tictactoe.player import Player
+from Projects.tictactoe.player import Player, RandomAI
 
 def init():
     print("Welcome to TIC-TAC-TOE Game!")
+
+    while True:
+        game_mode = int(input("Please choose an opponent."
+                              "\n1: Two Player"
+                              "\n2: Alice, who's kind of dumb and only makes random moves"
+                              "\nInput: "))
+
+        if (not game_mode == 1) and not game_mode == 2:
+            print("Invalid input! Please enter 1 or 2.")
+            continue
+        break
+
     board = Board()
 
-    player1 = Player('Bob', True)
-    player2 = Player('Alice', False)
+    player1 = Player(input("Player 1 name: "), True)
+
+    if game_mode == 1:
+        player2 = Player(input("Player 2 name: "), False)
+    else:
+        player2 = RandomAI('Alice', False)
 
 
     while True:
@@ -39,12 +55,7 @@ def turn(player1: Player, player2: Player, board: Board):
 
     board.display_board()
 
-    input_string = f"{current_player.get_name()}, {Square('what', current_player.get_state()).get_symbol()}: Enter a cell [A-C][1-3]:"
-    coordinate = input(input_string)
-
-    while not Square(coordinate).exists():
-        print("That's not a valid coordinate!")
-        coordinate = input(input_string)
+    coordinate = current_player.choose(board)
 
     board.set_board(coordinate, current_player.get_state())
     board.set_last_turn_player(current_player)

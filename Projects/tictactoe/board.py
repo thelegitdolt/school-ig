@@ -4,7 +4,7 @@ from Projects.tictactoe.player import Player
 class Square:
     ORD_A_MINUS_ONE = 64
 
-    def __init__(self, position: str, state:bool=None):
+    def __init__(self, position: str, state: bool=None):
         self.position = position
         self.state = state
 
@@ -35,9 +35,7 @@ class Square:
         a = [*self.position]
         return ord(a[0]) - Square.ORD_A_MINUS_ONE if convert_letter_to_number else a[0], int(a[1])
 
-
-
-    def exists(self):
+    def in_bound(self):
         if not len(self.position) == 2:
             return False
         letter, number = self.split_xy(True)
@@ -49,7 +47,7 @@ class Square:
         return True
 
     def to_number(self):
-        if not self.exists():
+        if not self.in_bound():
             raise AttributeError(f'{self.position} is not a valid coordinate')
 
         letter, number = self.split_xy(convert_letter_to_number=True)
@@ -64,22 +62,22 @@ class Square:
     def up(self):
         letter, number = self.split_xy()
         new = Square(f'{letter}{number - 1}')
-        return new if new.exists() else None
+        return new if new.in_bound() else None
 
     def down(self):
         letter, number = self.split_xy()
         new = Square(f'{letter}{number + 1}')
-        return new if new.exists() else None
+        return new if new.in_bound() else None
 
     def left(self):
         letter, number = self.split_xy(True)
         new = Square(f'{chr(letter - 1 + Square.ORD_A_MINUS_ONE)}{number}')
-        return new if new.exists() else None
+        return new if new.in_bound() else None
 
     def right(self):
         letter, number = self.split_xy(True)
         new = Square(f'{chr(letter + 1 + Square.ORD_A_MINUS_ONE)}{number}')
-        return new if new.exists() else None
+        return new if new.in_bound() else None
 
     @staticmethod
     def _checks_none(self, a, b):
@@ -114,10 +112,13 @@ class Board:
         for i in self.board:
             print(i.__str__())
 
+    def get_board(self):
+        return self.board
+
     # True is X, False is O, empty is None
     def set_board(self, pos: str, value: bool):
         posser = Square(pos)
-        if not posser.exists():
+        if not posser.in_bound():
             raise AttributeError(f"Cannot set; square {pos} does not exist")
 
         if not self.board[posser.to_number()].is_empty():
