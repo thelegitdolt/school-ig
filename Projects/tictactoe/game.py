@@ -1,4 +1,4 @@
-from Projects.tictactoe.board import Board, Square
+from Projects.tictactoe.board import Board
 from Projects.tictactoe.player import Player, RandomAI
 
 def init():

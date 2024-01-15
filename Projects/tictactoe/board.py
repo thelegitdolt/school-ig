@@ -11,6 +11,9 @@ class Square:
     def __str__(self):
         return f'Square,{self.position},{self.get_symbol()}'
 
+    def __repr__(self):
+        return f'Square({self.position}, {self.get_state()})'
+
     def is_empty(self):
         return self.state is None
 
@@ -108,10 +111,6 @@ class Board:
         self.last_turn_player = None
         self.board = [Square('A1'), Square('B1'), Square('C1'), Square('A2'), Square('B2'), Square('C2'), Square('A3'), Square('B3'), Square('C3')]
 
-    def print_board(self):
-        for i in self.board:
-            print(i.__str__())
-
     def get_board(self):
         return self.board
 
@@ -147,7 +146,6 @@ class Board:
                       Square.up_right, Square.down_left, Square.down_right)
 
         good_directions = []
-
 
         for direction in directions:
             if (direct := direction(start_pos)) is None:
