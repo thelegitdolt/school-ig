@@ -1,7 +1,6 @@
 from time import time
 
 
-
 def keep_time(func):
     def wrapper(*args, **kwargs):
         start = time()

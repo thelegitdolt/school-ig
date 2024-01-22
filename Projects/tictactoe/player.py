@@ -17,7 +17,7 @@ class Player:
 
         input_string = f"{self.get_name()}, {Square('what', self.get_state()).get_symbol()}: Enter a cell [A-C][1-3]:"
         while True:
-            coordinate = input(input_string)
+            coordinate = input(input_string).upper().replace(' ', '')
             if not (sqr := Square(coordinate)).in_bound():
                 print("That's not a valid coordinate!")
                 continue
@@ -52,5 +52,14 @@ class MinimaxAI(Player):
         super().__init__(name, state)
 
     def choose(self, board) -> str:
+        a = board
+
         raise NotImplementedError
+
+    @staticmethod
+    def mini_max(player: Player, starting_board, board, last_move: str) -> str:
+        from board import Board
+
+        a = board
+
 

@@ -132,43 +132,55 @@ class Board:
     def set_last_turn_player(self, player: Player):
         self.last_turn_player = player
 
-    def has_won(self, current_player: bool) -> bool:
+    # Returns 2 if X has won, 1 if O has won, 0 if there is a tie, and -1 if no victory
+    def get_result(self) -> str:
+        if len(a := self.check_victory()) == 1:
+            return a
+        elif self.check_tie():
+            return 't'
+        else:
+            return 'c'
+
+    def check_victory(self) -> str:
         for square in self.board:
-            if square.position == 'B2' or not square.get_state() == current_player:
+            if square.position == 'B2':
                 continue
-            if self.check_victory_startpos(current_player, square):
-                return True
+            if len(victory := self.check_victory_startpos(square)) == 1:
+                return victory
 
-        return False
+        return "None"
 
-    def check_victory_startpos(self, current_player: bool, start_pos: Square) -> bool:
+    # Returns 2 if X has won, 1 if O has won, 0 if no victory
+    def check_victory_startpos(self, start_pos: Square) -> str:
         directions = (Square.up, Square.right, Square.left, Square.down, Square.up_left,
                       Square.up_right, Square.down_left, Square.down_right)
 
-        good_directions = []
+        good_directions = {}
 
         for direction in directions:
             if (direct := direction(start_pos)) is None:
                 continue
-
-            actual_square = self.board[direct.to_number()]
-            if not (actual_square.get_state() == current_player):
+            elif self.board[direct.to_number()].is_empty():
                 continue
 
-            good_directions.append(direction)
+            actual_square = self.board[direct.to_number()]
+            if not (actual_square.get_state() == start_pos.get_state()):
+                continue
 
-        for direction in good_directions:
+            good_directions[direction] = start_pos.get_state()
+
+        for direction, state in good_directions.items():
             b = direction(start_pos)
             if (direct := direction(b)) is None:
                 continue
 
             actual_square = self.board[direct.to_number()]
-            if actual_square.get_state() == current_player:
-                return True
+            if actual_square.get_state() == state:
+                return 'X' if state else 'O'
 
-        return False
+        return "None"
 
-    def has_tie(self):
+    def check_tie(self):
         for square in self.board:
             if square.get_state() is None:
                 return False

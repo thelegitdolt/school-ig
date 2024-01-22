@@ -81,7 +81,7 @@ class Vector2D:
     def normalize(self):
         mag = self.magnitude()
         if mag != 0:
-            return Vector2D(self.x / self.magnitude(), self.y / self.magnitude())
+            return self / mag
         return None
 
     @require_two_identical_types

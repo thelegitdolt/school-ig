@@ -60,9 +60,10 @@ def turn(player1: Player, player2: Player, board: Board):
     board.set_board(coordinate, current_player.get_state())
     board.set_last_turn_player(current_player)
 
-    if board.has_won(current_player.get_state()):
+    result = board.get_result()
+    if result.isupper():
         return 1
-    elif board.has_tie():
+    elif result == 't':
         return 2
 
     return 0
