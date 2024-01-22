@@ -26,9 +26,15 @@ def generator1():
     s = 'second'
     yield s
 
+def char_generator():
+    a = 0
+    while True:
+        yield chr(a)
+        a += 1
+
+c = char_generator()
+
+from random import randint as rd
 
 
-a = random_number(80)
-print([next(a)+80 for i in range(100)])
 
-rg = range(100)
