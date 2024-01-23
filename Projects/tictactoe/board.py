@@ -124,14 +124,7 @@ class Board:
             raise AttributeError(f"Cannot set; square {pos} is full")
 
         self.board[posser.to_number()].set_state(value)
-        self.crude_board = self.display_crude_board()
         return True
-
-    def display_crude_board(self):
-        return f"""%c%c%c
-%c%c%c
-%c%c%c
-            """ % tuple(value.get_symbol() for value in self.board)
 
     def replace_board(self, other):
         self.board = [Square(i.get_position(), i.get_state()) for i in other.get_board()]
@@ -256,6 +249,5 @@ class Board:
         for i, char in enumerate([*fen]):
             board_board.append(Square(convert(i), uh_convert_ig(char)))
         a.board = board_board
-        a.crude_board = a.display_crude_board()
         return a
 
