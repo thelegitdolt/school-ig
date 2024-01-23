@@ -124,7 +124,22 @@ class Board:
             raise AttributeError(f"Cannot set; square {pos} is full")
 
         self.board[posser.to_number()].set_state(value)
+        self.crude_board = self.display_crude_board()
         return True
+
+    def display_crude_board(self):
+        return f"""%c%c%c
+%c%c%c
+%c%c%c
+            """ % tuple(value.get_symbol() for value in self.board)
+
+    def replace_board(self, other):
+        self.board = [Square(i.get_position(), i.get_state()) for i in other.get_board()]
+
+    def __copy__(self):
+        copy = Board()
+        copy.board = [Square(i.get_position(), i.get_state()) for i in self.get_board()]
+        return copy
 
     def get_last_turn_player(self):
         return self.last_turn_player
@@ -187,9 +202,9 @@ class Board:
 
         return True
 
-    def display_board(self):
+    def display_board(self, additional_message=' '):
         print(
-            f"""
+            f"""{additional_message}
    A   B   C 
  +---+---+---+
 1| %c | %c | %c |
@@ -217,22 +232,30 @@ class Board:
             if a == 1:
                 return 'A1'
             elif a == 2:
-                return 'A2'
-            elif a == 3:
-                return 'A3'
-            elif a == 4:
                 return 'B1'
+            elif a == 3:
+                return 'C1'
+            elif a == 4:
+                return 'A2'
             elif a == 5:
                 return 'B2'
             elif a == 6:
-                return 'B3'
-            elif a == 7:
-                return 'C1'
-            elif a == 8:
                 return 'C2'
+            elif a == 7:
+                return 'A3'
+            elif a == 8:
+                return 'B3'
             elif a == 9:
                 return 'C3'
             return False
-        a.board = [Square(convert(index), uh_convert_ig(char)) for index, char in enumerate([*fen])]
+
+        a = Board()
+
+        board_board = []
+
+        for i, char in enumerate([*fen]):
+            board_board.append(Square(convert(i), uh_convert_ig(char)))
+        a.board = board_board
+        a.crude_board = a.display_crude_board()
         return a
 

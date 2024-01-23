@@ -1,5 +1,6 @@
 from Projects.tictactoe.board import Board
-from Projects.tictactoe.player import Player, RandomAI
+from Projects.tictactoe.player import Player, RandomAI, MinimaxAI
+
 
 def init():
     print("Welcome to TIC-TAC-TOE Game!")
@@ -8,10 +9,11 @@ def init():
         game_mode = int(input("Please choose an opponent."
                               "\n1: Two Player"
                               "\n2: Alice, who's kind of dumb and only makes random moves"
+                              "\n3: Bob, A tic tac toe mastermind calculates every move"
                               "\nInput: "))
 
-        if (not game_mode == 1) and not game_mode == 2:
-            print("Invalid input! Please enter 1 or 2.")
+        if not 0 < game_mode < 4:
+            print("Invalid input! Please enter 1, 2, or 3.")
             continue
         break
 
@@ -21,8 +23,10 @@ def init():
 
     if game_mode == 1:
         player2 = Player(input("Player 2 name: "), False)
-    else:
+    elif game_mode == 2:
         player2 = RandomAI('Alice', False)
+    else:
+        player2 = MinimaxAI('Bob', False)
 
 
     while True:
