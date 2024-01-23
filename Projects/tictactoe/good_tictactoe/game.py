@@ -1,23 +1,22 @@
-from Projects.tictactoe.board import Board
-from Projects.tictactoe.player import Player, RandomAI, MinimaxAI
+from Projects.tictactoe.good_tictactoe.board import Board
+from Projects.tictactoe.good_tictactoe.player import Player, RandomAI, MinimaxAI
 
 
 def init():
     print("Welcome to TIC-TAC-TOE Game!")
 
     while True:
-        game_mode = int(input("Please choose an opponent."
-                              "\n1: Two Player"
-                              "\n2: Alice, who's kind of dumb and only makes random moves"
-                              "\n3: Bob, A tic tac toe mastermind calculates every move"
-                              "\nInput: "))
+        game_mode = input("Please choose an opponent."
+                          "\n1: Two Player"
+                          "\n2: Alice, who's kind of dumb and only makes random moves"
+                          "\n3: Bob, A tic tac toe mastermind who calculates every move"
+                          "\nInput: ")
 
-        if not 0 < game_mode < 4:
+        if not game_mode.isnumeric() or not 0 < (game_mode := int(game_mode)) < 4:
             print("Invalid input! Please enter 1, 2, or 3.")
             continue
         break
 
-    board = Board()
 
     player1 = Player(input("Player 1 name: "), True)
 
@@ -28,6 +27,7 @@ def init():
     else:
         player2 = MinimaxAI('Bob', False)
 
+    board = Board()
 
     while True:
         result = turn(player1, player2, board)
@@ -51,6 +51,7 @@ def init():
         else:
             print("Invalid answer!")
 
+
 def turn(player1: Player, player2: Player, board: Board):
     if (last_player := board.get_last_turn_player()) is None or last_player == player2:
         current_player = player1
@@ -71,6 +72,3 @@ def turn(player1: Player, player2: Player, board: Board):
         return 2
 
     return 0
-
-
-

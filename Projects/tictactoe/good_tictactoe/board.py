@@ -1,3 +1,6 @@
+from Projects.tictactoe.good_tictactoe.player import Player
+
+
 class Square:
     ORD_A_MINUS_ONE = 64
 
@@ -31,23 +34,7 @@ class Square:
         else:
             return 'O'
 
-    @staticmethod
-    def symbol(state):
-        if state is None:
-            return ' '
-        elif state:
-            return 'X'
-        else:
-            return 'O'
 
-    @staticmethod
-    def symbol_to_bool(symbol):
-        if symbol == 'X':
-            return True
-        elif symbol == 'O':
-            return False
-        else:
-            return None
 
     def split_xy(self, convert_letter_to_number=False):
         a = [*self.position]
@@ -118,60 +105,19 @@ class Square:
     def down_right(self):
         return Square._checks_none(self, Square.down, Square.right)
 
+
+
+
+
 class Board:
     def __init__(self):
-        # board is a list of cells that are represented
-        # by strings (" ", "O", and "X")
-        # initially it is made of empty cells represented
-        # by " " strings
-        self.sign = " "
-        self.size = 3
         self.last_turn_player = None
-        # the winner's sign O or X
         self.board = [Square('A1'), Square('B1'), Square('C1'), Square('A2'), Square('B2'), Square('C2'), Square('A3'), Square('B3'), Square('C3')]
-        self.winner = ""
-
-
-    def get_size(self):
-        return self.size
-
-    def get_winner(self):
-        return self.winner
 
     def get_board(self):
         return self.board
 
-    # return the winner's sign O or X (an instance winner)
-    def set(self, cell, sign):
-        self.set_board(cell, Square.symbol_to_bool(sign))
-
-    # mark the cell on the board with the sign X or O
-    # you need to convert A1, B1, …, C3 cells into index values from 1 to 9
-    # you can use a tuple ("A1", "B1",...) to obtain indexes
-    # this implementation is up to you
-
-    def show(self):
-        self.display_board()
-
-    def isempty(self, cell):
-        return self.board[Square(cell).to_number()].is_empty()
-
-    # you need to convert A1, B1, …, C3 cells into index values from 1 to 9
-    # return True if the cell is empty (not marked with X or O)
-
-    def isdone(self):
-        done = False
-        self.winner = ''
-        result = self.get_result()
-        if result == 'X' or result == 'O':
-            done = True
-            self.winner = result
-        elif result == 't':
-            done = True
-        # check all game terminating conditions, if one of them is present, assign the var done to True
-        # depending on conditions assign the instance var winner to O or X
-        return done
-
+    # True is X, False is O, empty is None
     def set_board(self, pos: str, value: bool):
         posser = Square(pos)
         if not posser.in_bound():
@@ -183,6 +129,21 @@ class Board:
         self.board[posser.to_number()].set_state(value)
         return True
 
+    def replace_board(self, other):
+        self.board = [Square(i.get_position(), i.get_state()) for i in other.get_board()]
+
+    def __copy__(self):
+        copy = Board()
+        copy.board = [Square(i.get_position(), i.get_state()) for i in self.get_board()]
+        return copy
+
+    def get_last_turn_player(self):
+        return self.last_turn_player
+
+    def set_last_turn_player(self, player: Player):
+        self.last_turn_player = player
+
+    # Returns 2 if X has won, 1 if O has won, 0 if there is a tie, and -1 if no victory
     def get_result(self) -> str:
         if len(a := self.check_victory()) == 1:
             return a
@@ -237,21 +198,17 @@ class Board:
 
         return True
 
-
-
     def display_board(self, additional_message=' '):
-            print(
-                f"""{additional_message}
-       A   B   C 
-     +---+---+---+
-    1| %c | %c | %c |
-     +---+---+---+
-    2| %c | %c | %c |
-     +---+---+---+
-    3| %c | %c | %c |
-     +---+---+---+
-                """ % tuple(value.get_symbol() for value in self.board)
-            )
+        print(
+            f"""{additional_message}
+   A   B   C 
+ +---+---+---+
+1| %c | %c | %c |
+ +---+---+---+
+2| %c | %c | %c |
+ +---+---+---+
+3| %c | %c | %c |
+ +---+---+---+
+            """ % tuple(value.get_symbol() for value in self.board)
+        )
 
-
-# draw the board
