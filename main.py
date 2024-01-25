@@ -2,7 +2,6 @@ from Projects.tictactoe.good_tictactoe.game import init
 
 #
 
-from Projects.tictactoe import tictac
 
 
-
+print(int.from_bytes([255, 0, 0], byteorder='big'))
