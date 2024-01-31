@@ -1,24 +1,37 @@
+# draws a tree
 import turtle
 
-from labs.lab3.stars import star_recursive, star
+
+# set the canvas window
+def set_canvas():
+    s = turtle.Screen()
+    s.setup(450, 410)
+    s.bgcolor('ivory')
+    s.title('Turtle Program')
+    return s
+
+
+# set a turtle (a pen)
+def set_pen(color):
+    t = turtle.Turtle()
+    t.shape('turtle')
+    t.pen(pencolor=color, fillcolor=color, pensize=1, speed=10)
+    return t
+
+
+# draw a tree fractal using recursion
+
+
 
 # main program
 if __name__ == '__main__':
-    s = turtle.Screen()
-    s.setup(800, 400)
-    s.bgcolor("white")
-    s.title("Turtle Program")
-
-    t = turtle.Turtle()
-    t.shape("turtle")
-    t.pen(pencolor='dark violet', fillcolor='dark violet', pensize=3, speed=1)
-
+    s = set_canvas()
+    t = set_pen('brown')
     t.penup()
-    t.goto(-150, 0)
-    star(100, 5, 2)  # should draw a purple pentagram (5-pointed star)
-
-    t.penup()
-    t.goto(150, 0)
-    t.color('red')
+    t.goto(-45, -150)
+    t.left(90)
     t.pendown()
-    star_recursive(100, 8, 8, 3)  # should draw a red octogram (8-pointed star)
+
+    from labs.lab3.tree_fractal import draw_tree
+    draw_tree(t, 60, 20, 6)
+    s.exitonclick()
