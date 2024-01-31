@@ -34,7 +34,7 @@ class Player:
             return False
         return (other.state == self.state) & (other.name == self.name)
 
-class RandomAI(Player):
+class AI(Player):
     def __init__(self, name, state):
         super().__init__(name, state)
 
@@ -55,6 +55,8 @@ class MinimaxAI(Player):
     def choose(self, board) -> str:
         print(f'{self.name} is choosing a move...')
         sleep(0.5)
+
+        # Minimax AI is instructed to pick a random slot when the board has more than 7 spots
 
         unfilled_spaces = [square.get_position() for square in board.get_board() if square.get_state() is None]
         if len(unfilled_spaces) > 7:

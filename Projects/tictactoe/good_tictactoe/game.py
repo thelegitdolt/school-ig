@@ -1,5 +1,5 @@
 from Projects.tictactoe.good_tictactoe.board import Board
-from Projects.tictactoe.good_tictactoe.player import Player, RandomAI, MinimaxAI
+from Projects.tictactoe.good_tictactoe.player import Player, AI, MinimaxAI
 
 
 def init():
@@ -23,7 +23,7 @@ def init():
     if game_mode == 1:
         player2 = Player(input("Player 2 name: "), False)
     elif game_mode == 2:
-        player2 = RandomAI('Alice', False)
+        player2 = AI('Alice', False)
     else:
         player2 = MinimaxAI('Bob', False)
 

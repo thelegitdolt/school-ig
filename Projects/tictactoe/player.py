@@ -40,7 +40,7 @@ class Player:
             return False
         return (other.state == self.state) & (other.name == self.name)
 
-class RandomAI(Player):
+class AI(Player):
     def __init__(self, name, state):
         super().__init__(name, state)
 

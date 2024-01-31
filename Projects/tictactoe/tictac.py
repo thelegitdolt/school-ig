@@ -5,7 +5,7 @@
 # output: interactive text messages and a tic-tac-toe board
 
 from Projects.tictactoe.board import Board
-from Projects.tictactoe.players import Player
+from Projects.tictactoe.player import Player
 
 # main program
 print("Welcome to TIC-TAC-TOE Game!")
