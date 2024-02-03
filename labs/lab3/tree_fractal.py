@@ -49,7 +49,7 @@ def draw_leaves(pen, branch_width):
 
     pen.pendown()
 
-    pen.pen(pencolor='green', fillcolor='green')
+    pen.pen(pencolor='blue', fillcolor='blue')
     pen.begin_fill()
     pen.circle(branch_width * 2 if branch_width > 5 else 10)
     pen.end_fill()
