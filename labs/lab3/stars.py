@@ -22,9 +22,6 @@ def get_points(x, y, size, sides):
         traverser.left(180)
         traverser.fd(size)
 
-
-
-
 def star(size, sides, pen: t.Turtle, d=2):
     pen.pendown()
     points = tuple(get_points(pen.xcor(), pen.ycor(), size, sides))
