@@ -34,7 +34,7 @@ def update(val):
     b.set_xdata(new_theta)
     b.set_ydata(new_r)
     fig.canvas.draw_idle()
-
+    plt.imsave()
 n_slider.on_changed(update)
 d_slider.on_changed(update)
 
