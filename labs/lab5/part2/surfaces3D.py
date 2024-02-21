@@ -75,6 +75,7 @@ def get_position_by_rads(theta_val, p_dimensions):
         current_theta = 2 * skibidi_toilet - theta_val
         hypotenuse = len_ab * np.sin(ang_cab) * 0.5 / np.sin(skibidi_toilet - current_theta - ang_cab)
         return hypotenuse * np.cos(theta_val), hypotenuse * np.sin(theta_val)
+
 p_width = 2
 p_height = 3
 p_bottom_left_angle_rads = skibidi_toilet / 4
