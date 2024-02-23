@@ -6,6 +6,15 @@ def init():
     while inp not in ('quit', 'q'):
         inp = input('Please enter your expression here. To quit enter \'quit\' or \'q\':')
 
+        try:
+            a = Expression.of(inp)
+            ans = a.evaluate_tree()
+
+            print(ans)
+        except AttributeError:
+            print('Invalid expression!')
+            continue
+
 
 class Expression:
     operation_priority = {3: '^', 2: '/*', 1: '+-'}
@@ -17,18 +26,39 @@ class Expression:
         '-': lambda a, b: a - b
     }
 
-    def __init__(self, operation, left=None, right=None):
+    def __init__(self, operation=None, left=None, right=None):
         self.operation = operation
         self.left = left
         self.right = right
 
+    def __str__(self):
+        a = self.left.__str__() if isinstance(self.left, Expression) else self.left
+        b = self.right.__str__() if isinstance(self.right, Expression) else self.right
+        return f'<{self.operation}, {a}, {b}>'
+
+    def preorder(self):
+        a = self.left.preorder() if isinstance(self.left, Expression) else self.left
+        b = self.right.preorder() if isinstance(self.right, Expression) else self.right
+        return f'{self.operation} {a} {b}'
+
+    def postorder(self):
+        a = self.left.postorder() if isinstance(self.left, Expression) else self.left
+        b = self.right.postorder() if isinstance(self.right, Expression) else self.right
+        return f'{a} {b} {self.operation}'
+
+    def inorder(self):
+        a = self.left.inorder() if isinstance(self.left, Expression) else self.left
+        b = self.right.inorder() if isinstance(self.right, Expression) else self.right
+        return f'({a} {self.operation} {b})'
+
     def evaluate_tree(self):
         left_expr = self.left.evaluate_tree() if isinstance(self.left, Expression) else self.left
-        right_expr = self.right.evaluate_tree() if isinstance(self.left, Expression) else self.left
+        right_expr = self.right.evaluate_tree() if isinstance(self.right, Expression) else self.right
         return Expression.operation_apply[self.operation](left_expr, right_expr)
 
-    # def __repr__(self):
-    #     return 'Expression({})'.format(self.expression)
+    @staticmethod
+    def of(expression: str):
+        return Expression.to_expression_object(Expression.begin_parse(expression))
 
     @staticmethod
     def begin_parse(expr: str):
@@ -46,13 +76,16 @@ class Expression:
                 parenthetical_depth -= 1
                 if parenthetical_depth == 0:
                     is_parenthetical_mode = False
-                    parenthetical_expr += i
-                    parsed_expression.append(Expression(parenthetical_expr[1:-1]))
+                    parsed_expression.append(Expression.of(parenthetical_expr))
                     parenthetical_expr = ''
+                else:
+                    parenthetical_expr += i
                 continue
             if is_parenthetical_mode:
-                parenthetical_expr += i
+                if not (i == '(' and parenthetical_depth == 1):
+                    parenthetical_expr += i
                 continue
+
             if i.isnumeric():
                 number += i
                 continue
@@ -69,29 +102,30 @@ class Expression:
 
     @staticmethod
     def to_expression_object(proto_expr: list):
-        for i in range(3, 1, -1):
+        for priority in range(3, 1, -1):
             expression_chains = []
-            for j in proto_expr:
-                current_chain = []
-                if j in Expression.operation_priority[i]:
-                    if j - 1 in expression_chains:
-                        current_chain.extend(range(j, j+2))
-                    else:
-                        if len(current_chain) > 0:
-                            expression_chains.append(current_chain)
+            current_chain = []
+            for index, item in enumerate(proto_expr):
+                if isinstance(item, str):
+                    if item in Expression.operation_priority[priority]:
+                        if index - 1 in expression_chains:
+                            current_chain.extend(range(index, index + 2))
+                        else:
+                            current_chain.extend(range(index - 1, index + 2))
+                    elif len(current_chain) > 0:
+                        expression_chains.append(current_chain)
                         current_chain = []
-                        current_chain.extend(range(j-1, j+2))
             for chain in expression_chains:
-                proto_expr[chain[0]:chain[-1]+1] = Expression.evaluate_expression_chain(proto_expr[chain[0]:chain[-1]+1])
+                proto_expr[chain[0]:chain[-1] + 1] = Expression.convert_expression_chain(
+                    proto_expr[chain[0]:chain[-1] + 1]),
 
-        return Expression.evaluate_expression_chain(proto_expr)
+        return Expression.convert_expression_chain(proto_expr)
 
     @staticmethod
-    def evaluate_expression_chain(proto_expr: list):
+    def convert_expression_chain(proto_expr: list):
         if len(proto_expr) < 1:
             raise AttributeError('Something broke lol')
 
         if len(proto_expr) == 1:
             return proto_expr[0]
-        return Expression(proto_expr[1], proto_expr[0], Expression.evaluate_expression_chain(proto_expr[2:]))
-
+        return Expression(proto_expr[1], proto_expr[0], Expression.convert_expression_chain(proto_expr[2:]))
