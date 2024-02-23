@@ -173,6 +173,14 @@ class Board:
         # depending on conditions assign the instance var winner to O or X
         return done
 
+    def __copy__(self):
+        copy = Board()
+        copy.board = [Square(i.get_position(), i.get_state()) for i in self.get_board()]
+        return copy
+
+    def replace_board(self, other):
+        self.board = [Square(i.get_position(), i.get_state()) for i in other.get_board()]
+
     def set_board(self, pos: str, value: bool):
         posser = Square(pos)
         if not posser.in_bound():

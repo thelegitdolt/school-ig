@@ -5,14 +5,14 @@
 # output: interactive text messages and a tic-tac-toe board
 
 from Projects.tictactoe.board import Board
-from Projects.tictactoe.player import Player
+from Projects.tictactoe.player import Player, MinimaxAI
 
 # main program
 print("Welcome to TIC-TAC-TOE Game!")
 while True:
     board = Board()
     player1 = Player("Bob", "X")
-    player2 = Player("Alice", "O")
+    player2 = MinimaxAI("Alice", "O")
     turn = True
     while True:
         board.show()

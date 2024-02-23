@@ -60,12 +60,6 @@ class MinimaxAI(Player):
     def choose(self, board) -> str:
         print(f'{self.name} is choosing a move...')
         sleep(0.5)
-
-        unfilled_spaces = [square.get_position() for square in board.get_board() if square.get_state() is None]
-        if len(unfilled_spaces) > 7:
-            return unfilled_spaces[rd.randint(0, len(unfilled_spaces) - 1)]
-
-
         board.set_board(MinimaxAI.mini_max(board, board.__copy__(), self.get_state(), True), self.get_state())
 
     @staticmethod
