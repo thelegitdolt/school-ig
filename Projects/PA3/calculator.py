@@ -1,7 +1,6 @@
 import math
 from Projects.PA3.tree import ExpTree
 
-
 def infix_to_postfix(infix):
     return ExpTree.infix_to_postfix(infix)
 
@@ -9,21 +8,6 @@ def infix_to_postfix(infix):
 def calculate(infix):
     return Expression.of(infix).evaluate_tree()
 
-
-def init():
-    print('Welcome to Calculator Program!')
-    inp = None
-    while inp not in ('quit', 'q'):
-        inp = input('Please enter your expression here. To quit enter \'quit\' or \'q\':')
-
-        try:
-            a = Expression.of(inp)
-            ans = a.evaluate_tree()
-
-            print(ans)
-        except AttributeError:
-            print('Invalid expression!')
-            continue
 
 
 class Expression:
@@ -145,3 +129,25 @@ class Expression:
         if len(proto_expr) == 1:
             return proto_expr[0]
         return Expression(proto_expr[1], proto_expr[0], Expression.convert_expression_chain(proto_expr[2:]))
+
+
+def init():
+    print('Welcome to Calculator Program!')
+    inp = None
+    while inp not in ('quit', 'q'):
+        inp = input('Please enter your expression here. To quit enter \'quit\' or \'q\':')
+
+        try:
+            a = Expression.of(inp)
+            ans = a.evaluate_tree()
+
+            print(ans)
+        except AttributeError:
+            if inp in ('quit', 'q'):
+                print('Goodbye!')
+            else:
+                print('Invalid expression!')
+            continue
+
+init()
+
