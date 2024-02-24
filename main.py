@@ -1,10 +1,21 @@
-from Projects.PA3.calculator import Expression
+from Projects.PA3.stack import Stack
 
-test = '(4 + 5) * 3 + 7'
-proto_expr = Expression.begin_parse(test)
-print(proto_expr)
-tree_maybe = Expression.to_expression_object(proto_expr)
-print(tree_maybe.postorder())
-print(tree_maybe.inorder())
-print(tree_maybe.evaluate_tree())
+# a driver program for class Stack
 
+if __name__ == '__main__':
+
+    data_in = ['hello', 'how', 'are', 'you']
+    s = Stack()
+    for i in data_in:
+        s.push(i)
+
+    assert s.size() == len(data_in)
+    assert s.peek() == data_in[-1]
+
+    data_out = []
+    while not s.isEmpty():
+        data_out.append(s.pop())
+
+    assert data_out == data_in[::-1]
+    assert s.size() == 0
+    assert s.peek() == None

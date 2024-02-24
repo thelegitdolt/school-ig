@@ -1,4 +1,14 @@
 import math
+from Projects.PA3.tree import ExpTree
+
+
+def infix_to_postfix(infix):
+    return ExpTree.infix_to_postfix(infix)
+
+
+def calculate(infix):
+    return Expression.of(infix).evaluate_tree()
+
 
 def init():
     print('Welcome to Calculator Program!')
@@ -86,25 +96,26 @@ class Expression:
                     parenthetical_expr += i
                 continue
 
-            if i.isnumeric():
+            if i.isnumeric() or i == '.':
                 number += i
                 continue
             if len(number) > 0:
-                parsed_expression.append(int(number))
+                parsed_expression.append(float(number))
                 number = ''
             if i in '+-*/^':
                 parsed_expression.append(i)
         else:
             if len(number) > 0:
-                parsed_expression.append(int(number))
+                parsed_expression.append(float(number))
 
         return parsed_expression
 
     @staticmethod
     def to_expression_object(proto_expr: list):
+        expression_chains = []
         for priority in range(3, 1, -1):
-            expression_chains = []
             current_chain = []
+
             for index, item in enumerate(proto_expr):
                 if isinstance(item, str):
                     if item in Expression.operation_priority[priority]:
@@ -115,9 +126,14 @@ class Expression:
                     elif len(current_chain) > 0:
                         expression_chains.append(current_chain)
                         current_chain = []
+            else:
+                if len(current_chain) > 0:
+                    expression_chains.append(current_chain)
+
             for chain in expression_chains:
                 proto_expr[chain[0]:chain[-1] + 1] = Expression.convert_expression_chain(
                     proto_expr[chain[0]:chain[-1] + 1]),
+            expression_chains = []
 
         return Expression.convert_expression_chain(proto_expr)
 
