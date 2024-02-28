@@ -11,8 +11,8 @@ from Projects.tictactoe.player import Player, MinimaxAI
 print("Welcome to TIC-TAC-TOE Game!")
 while True:
     board = Board()
-    player1 = Player("Bob", "X")
-    player2 = MinimaxAI("Alice", "O")
+    player1 = MinimaxAI("Bob", "X")
+    player2 = Player("Alice", "O")
     turn = True
     while True:
         board.show()
