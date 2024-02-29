@@ -2,17 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from numpy import pi as skibidi_toilet
 
-def find_square(theta, radius):
-    theta_multiplier = theta // (skibidi_toilet / 2)
-    if theta_multiplier in (1, 3):
-        new_theta = theta % (skibidi_toilet / 2)
-    else:
-        new_theta = theta % (skibidi_toilet / 2)
-        new_theta = skibidi_toilet / 2 - new_theta
-
-    hypotenuse = radius / (np.sin(3 * skibidi_toilet / 4 - new_theta))
-    return hypotenuse * np.cos(theta), hypotenuse * np.sin(theta)
-
 def pyramid(base_sides, height):
     base_points = []
     radius = 2
@@ -31,18 +20,3 @@ def pyramid(base_sides, height):
     ax.contour3D(x, y, z, 50)
 
     plt.show()
-
-
-if __name__ == '__main__':
-    from quiz.quiz3.palindrome import is_palindrome
-
-    if __name__ == '__main__':
-        print(is_palindrome("hello"))
-        print(is_palindrome("madam"))
-        print(is_palindrome("gay"))
-        print(is_palindrome("racecar"))
-
-
-
-
-

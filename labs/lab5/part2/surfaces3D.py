@@ -9,7 +9,7 @@ ax = fig.add_subplot(2, 3, 1, projection='3d')
 x = np.linspace(-1, 1, 30)
 y = np.linspace(-1, 1, 30)
 X, Y = np.meshgrid(x, y)           # make a mesh, two 2D arrays, and assign 2D arrays to X and Y
-a,b = 1, 1
+a, b = 1, 1
 Z = X*X/a - Y*Y/b                  # make a 2D array and assign it to Z
 ax.contour3D(X, Y, Z, 50)
 ax.set_title('Hyperbolic Paraboloid')
