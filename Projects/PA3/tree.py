@@ -78,10 +78,6 @@ class ExpTree(BinaryTree):
             int(self.left) if float(self.left).is_integer() else float(self.left))
         b = self.right.preorder(False) if isinstance(self.right, ExpTree) else (
             int(self.right) if float(self.right).is_integer() else float(self.right))
-        if is_root:
-            c = ' '
-        else:
-            c = ''
         return f'{self.root} {a} {b}{c}'
 
     def postorder(self, is_root=True):
@@ -217,6 +213,52 @@ class ExpTree(BinaryTree):
                 ls_mod += 2
 
         return expr_copy[0]
+
+
+# a driver for testing BinaryTree and ExpTree
+def test():
+    # test a BinaryTree
+    r = BinaryTree('a')
+    assert r.getRootVal() == 'a'
+    assert r.getLeftChild() == None
+    assert r.getRightChild() == None
+    assert str(r) == 'a()()'
+
+    r.insertLeft('b')
+    assert r.getLeftChild().getRootVal() == 'b'
+    assert str(r) == 'a(b()())()'
+
+    r.insertRight('c')
+    assert r.getRightChild().getRootVal() == 'c'
+    assert str(r) == 'a(b()())(c()())'
+
+    r.getLeftChild().insertLeft('d')
+    r.getLeftChild().insertRight('e')
+    r.getRightChild().insertLeft('f')
+    assert str(r) == 'a(b(d()())(e()()))(c(f()())())'
+
+    assert str(r.getRightChild()) == 'c(f()())()'
+    assert r.getRightChild().getLeftChild().getRootVal() == 'f'
+
+    # test an ExpTree
+
+    postfix = '5 2 3 * +'.split()
+    tree = ExpTree.make_tree(postfix)
+    assert str(tree) == '(5+(2*3))'
+    assert ExpTree.inorder(tree) == '(5+(2*3))'
+    assert ExpTree.postorder(tree) == ' 5 2 3 * +'
+    assert ExpTree.preorder(tree) == '+ 5 * 2 3 '
+    assert ExpTree.evaluate(tree) == 11.0
+
+    postfix = '5 2 + 3 *'.split()
+    tree = ExpTree.make_tree(postfix)
+    assert str(tree) == '((5+2)*3)'
+    assert ExpTree.inorder(tree) == '((5+2)*3)'
+    assert ExpTree.postorder(tree) == ' 5 2 + 3 *'
+    assert ExpTree.preorder(tree) == '* + 5 2 3 '
+    assert ExpTree.evaluate(tree) == 21.0
+
+    print('tree.py runs fine')
 
 
 

@@ -2,7 +2,7 @@ import math
 from Projects.PA3.tree import ExpTree
 
 def infix_to_postfix(infix):
-    return ExpTree.infix_to_postfix(infix)
+    return Expression.of(infix).postorder()
 
 
 def calculate(infix):
@@ -21,34 +21,42 @@ class Expression:
     }
 
     def __init__(self, operation=None, left=None, right=None):
-        self.operation = operation
+        self.root = operation
         self.left = left
         self.right = right
 
     def __str__(self):
         a = self.left.__str__() if isinstance(self.left, Expression) else self.left
         b = self.right.__str__() if isinstance(self.right, Expression) else self.right
-        return f'<{self.operation}, {a}, {b}>'
+        return f'<{self.root}, {a}, {b}>'
 
-    def preorder(self):
-        a = self.left.preorder() if isinstance(self.left, Expression) else self.left
-        b = self.right.preorder() if isinstance(self.right, Expression) else self.right
-        return f'{self.operation} {a} {b}'
+    def preorder(self, is_root=True):
+        a = self.left.preorder(False) if isinstance(self.left, ExpTree) else (
+            int(self.left) if float(self.left).is_integer() else float(self.left))
+        b = self.right.preorder(False) if isinstance(self.right, ExpTree) else (
+            int(self.right) if float(self.right).is_integer() else float(self.right))
+        if is_root:
+            c = ' '
+        else:
+            c = ''
+        return f'{self.root} {a} {b}'
 
-    def postorder(self):
-        a = self.left.postorder() if isinstance(self.left, Expression) else self.left
-        b = self.right.postorder() if isinstance(self.right, Expression) else self.right
-        return f'{a} {b} {self.operation}'
+    def postorder(self, is_root=True):
+        a = self.left.postorder(False) if isinstance(self.left, Expression) else (
+            int(self.left) if float(self.left).is_integer() else float(self.left))
+        b = self.right.postorder(False) if isinstance(self.right, Expression) else (
+            int(self.right) if float(self.right).is_integer() else float(self.right))
+        return f'{a} {b} {self.root}'
 
     def inorder(self):
         a = self.left.inorder() if isinstance(self.left, Expression) else self.left
         b = self.right.inorder() if isinstance(self.right, Expression) else self.right
-        return f'({a} {self.operation} {b})'
+        return f'({a} {self.root} {b})'
 
     def evaluate_tree(self):
         left_expr = self.left.evaluate_tree() if isinstance(self.left, Expression) else self.left
         right_expr = self.right.evaluate_tree() if isinstance(self.right, Expression) else self.right
-        return Expression.operation_apply[self.operation](left_expr, right_expr)
+        return Expression.operation_apply[self.root](left_expr, right_expr)
 
     @staticmethod
     def of(expression: str):
@@ -149,5 +157,29 @@ def init():
                 print('Invalid expression!')
             continue
 
-init()
+
+def test():
+    # test function 'infix_to_postfix' for simple input
+    print(infix_to_postfix('(5+2)*3'))
+    assert infix_to_postfix('(5+2)*3') == '5 2 + 3 *'
+
+    assert infix_to_postfix('5+2*3') == '5 2 3 * +'
+
+    # test function 'calculate' for simple input
+    assert calculate('(5+2)*3') == 21.0
+    assert calculate('5+2*3') == 11.0
+
+    # test function "infix_to_postfix' for more complex input
+    assert infix_to_postfix('51+20*(4-2)^3') == '51 20 4 2 - 3 ^ * +'
+    assert infix_to_postfix('(1.3+2.7)*((2.02-0.02)+1)+6.5') \
+           == '1.3 2.7 + 2.02 0.02 - 1 + * 6.5 +'
+    assert infix_to_postfix('((3^2-4)*(5-2))-(2^3+1)') \
+           == '3 2 ^ 4 - 5 2 - * 2 3 ^ 1 + -'
+
+    # test function 'calculate' for more complex input
+    assert calculate('51+20*(4-2)^3') == 211.0
+    assert calculate('(1.3+2.7)*((2.02-0.02)+1)+6.5') == 18.5
+    assert calculate('((3^2-4)*(5-2))-(2^3+1)') == 6.0
+
+    print('calculator.py runs fine')
 
