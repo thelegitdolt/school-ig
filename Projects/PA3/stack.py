@@ -22,8 +22,7 @@ class Stack:
         return len(self)
 
 
-def test():
-
+def test_stack():
     data_in = ['hello', 'how', 'are', 'you']
     s = Stack()
     for i in data_in:
@@ -38,7 +37,7 @@ def test():
 
     assert data_out == data_in[::-1]
     assert s.size() == 0
-    assert s.peek() == None
+    assert s.peek() is None
 
     print('stack.py runs fine')
 

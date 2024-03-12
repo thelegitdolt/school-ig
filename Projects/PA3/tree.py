@@ -78,6 +78,10 @@ class ExpTree(BinaryTree):
             int(self.left) if float(self.left).is_integer() else float(self.left))
         b = self.right.preorder(False) if isinstance(self.right, ExpTree) else (
             int(self.right) if float(self.right).is_integer() else float(self.right))
+        if is_root:
+            c = ' '
+        else:
+            c = ''
         return f'{self.root} {a} {b}{c}'
 
     def postorder(self, is_root=True):
@@ -216,7 +220,7 @@ class ExpTree(BinaryTree):
 
 
 # a driver for testing BinaryTree and ExpTree
-def test():
+def test_tree():
     # test a BinaryTree
     r = BinaryTree('a')
     assert r.getRootVal() == 'a'

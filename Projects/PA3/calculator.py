@@ -1,4 +1,5 @@
 import math
+
 from Projects.PA3.tree import ExpTree
 
 def infix_to_postfix(infix):
@@ -7,8 +8,6 @@ def infix_to_postfix(infix):
 
 def calculate(infix):
     return Expression.of(infix).evaluate_tree()
-
-
 
 class Expression:
     operation_priority = {3: '^', 2: '/*', 1: '+-'}
@@ -158,7 +157,7 @@ def init():
             continue
 
 
-def test():
+def test_calculator():
     # test function 'infix_to_postfix' for simple input
     print(infix_to_postfix('(5+2)*3'))
     assert infix_to_postfix('(5+2)*3') == '5 2 + 3 *'

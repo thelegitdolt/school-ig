@@ -13,7 +13,7 @@ def resize(img, scale):
 
 def crop(img, region):
     x_min, y_min, x_max, y_max = region
-    return img[x_min:x_max, y_min:y_max]
+    return img[y_min:y_max, x_min:x_max]
 
 
 def blur(img, factor):
