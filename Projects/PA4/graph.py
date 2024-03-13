@@ -61,24 +61,25 @@ class Graph:
     def breadth_first_search(self, index):
         start, queue, traversal = self.vertList[index], [], []
         queue.append(start)
-        traversal.append(start)
         
         while not len(queue) == 0:
-            v = queue.pop()
-            traversal.append(v)
+            v = queue.pop(0)
+            if v.id in traversal:
+                continue
+                
+            traversal.append(v.id)
             for vertex in v.connectedTo.keys():
-                if vertex in traversal:
-                    continue
                 queue.append(vertex)
         return traversal
     
     def depth_first_search(self, index):
         start, stack, traversal = self.vertList[index], [], []
-        stack.insert(start, 0)
-        traversal.append(start)
+        stack.append(start)
         
         while not len(stack) == 0:
             vertex = stack.pop()
+            if vertex in traversal:
+                continue
             traversal.append(vertex)
             for child in vertex.connectedTo.keys():
                 if child in traversal:
