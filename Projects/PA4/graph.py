@@ -7,6 +7,10 @@ class Vertex:
     
     def addNeighbor(self, nbr, weight=0):
         self.connectedTo[nbr] = weight
+        
+    def delNeighbor(self, nbr):
+        if nbr in self.connectedTo:
+            del self.connectedTo[nbr]
     
     def __str__(self):
         return str(self.id) + ' connectedTo: ' + str([x.id for x in self.connectedTo])
@@ -38,6 +42,12 @@ class Graph:
     def getVertex(self, key):
         if key in self.vertList:
             return self.vertList[key]
+        
+    def get_by_id(self, value):
+        for v in self.vertList.values():
+            if value == v.id:
+                return v
+            
     
     def __contains__(self, key):
         if isinstance(key, Vertex):
@@ -52,6 +62,9 @@ class Graph:
         
         self.vertList[from_].addNeighbor(self.vertList[to], weight)
     
+    def removeEdge(self, from_, to):
+        self.vertList[from_].delNeighbor(to)
+        
     def getVertices(self):
         return self.vertList.keys()
     
@@ -72,21 +85,23 @@ class Graph:
                 queue.append(vertex)
         return traversal
     
-    def depth_first_search(self, index):
-        start, stack, traversal = self.vertList[index], [], []
-        stack.append(start)
-        
-        while not len(stack) == 0:
-            vertex = stack.pop()
-            if vertex in traversal:
-                continue
-            traversal.append(vertex)
-            for child in vertex.connectedTo.keys():
-                if child in traversal:
-                    continue
-                stack.append(child)
+    def depth_first_search(self):
+        for v in self.vertList.values():
+            v.color = 'white'
+        path = []  # not a part of DFS, used to check the order of vertices traversed by DFS
+        for v in self.vertList.values():
+            if v.color == 'white':
+                self.DFS(v.id, path)
+        return path
     
     def DFS(self, vid, path):
-        pass
+        v = self.vertList[vid]
+        v.color = 'gray'
+        path.append(v.id)
+        for u in v.connectedTo.keys():
+            if u.color == 'white':
+                self.DFS(u.id, path)
+        v.color = 'black'
+        return path
 
     

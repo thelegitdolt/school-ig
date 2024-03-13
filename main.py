@@ -1,10 +1,15 @@
-from labs.lab8.part2.queens import solve_queens
+from Projects.PA4.fifteen import Fifteen
 
 if __name__ == '__main__':
-    n = int(input('Enter a number of queens: \n'))
-    solutions = solve_queens(n)
-    print(f'The {n}-queens puzzle has {len(solutions)} solutions:')
-    for solution in solutions:
-        print(solution)
+    a = Fifteen()
+    a.update(15)
+    for i in a.tiles:
+        print(i.id, i.connectedTo)
+    while True:
 
-    
+        b = int(input('do the thing fella \n'))
+        a.update(b)
+        a.draw()
+        for i in a.tiles:
+            print(i)
+        
